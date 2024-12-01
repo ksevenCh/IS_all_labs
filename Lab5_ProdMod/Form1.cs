@@ -28,12 +28,12 @@ namespace Lab5_ProdMod
             InitializeComponent();
             
 
-            Parse(ref facts, ref products);
-            //ParseC(ref facts, ref products);
+            //Parse(ref facts, ref products);
+            ParseC(ref facts, ref products);
             FillProduct(ref products, facts);
             FillProductDescription(products);
-            OutputDescriptionInFile(products);
-            //OutputDescriptionInFileC(products);
+            //OutputDescriptionInFile(products);
+            OutputDescriptionInFileC(products);
 
             List<string> productDescription = new List<string>();
 
