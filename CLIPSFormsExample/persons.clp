@@ -5,12 +5,12 @@
 
 (deftemplate ioproxy  ; шаблон факта-посредника для обмена информацией с GUI
 	(slot fact-id)        ; теоретически тут id факта для изменения
-	(multislot questions)   ; возможные ответы
+	(multislot answers)  ; возможные ответы
 	(multislot messages)  ; исходящие сообщения
 	(slot reaction)       ; возможные ответы пользователя
 	(slot value)          ; выбор пользователя
 	(slot restore)        ; забыл зачем это поле
-    (multislot answers)
+    (multislot questions) 
 )
 
 ; Собственно экземпляр факта ioproxy
@@ -86,6 +86,7 @@
     (modify ?proxy (questions))
 )
 
+
 ;======================================================================================
 
 (deftemplate input-question
@@ -112,6 +113,15 @@
 	(assert (fact (name ?val)))
 )
 
+(defrule match-target
+    (declare (salience 10))
+    (target (name ?val))
+    (fact (name ?n&?val))
+    =>
+    (do-for-all-facts ((?f fact)) TRUE (retract ?f))
+    (assert (sendmessage "Найден целевой факт, остановка"))
+)
+
 ;======================================================================================
 
 (deffacts axioms
@@ -122,7 +132,6 @@
 (axiom (name "СССР"))
 (axiom (name "США"))
 (axiom (name "Великобритания"))
-(axiom (name "Турция"))
 (axiom (name "Повседневность"))
 (axiom (name "Смешной"))
 (axiom (name "Весёлый"))
@@ -727,12 +736,6 @@
 =>
 (assert (fact (name "Супермэн и Лоис")))
 (assert (sendmessage "DC, Иностранный, Серии по 40 минут, Драма, Приключения -> Супермэн и Лоис")))
-(defrule rule79
-(fact(name "Турция"))
-(not(exists (fact (name "Иностранный"))))
-=>
-(assert (fact (name "Иностранный")))
-(assert (sendmessage "Турция -> Иностранный")))
 (defrule rule80
 (fact(name "Эмоциональный"))
 (fact(name "Плоттвисты"))
@@ -839,22 +842,6 @@
 =>
 (assert (fact (name "Викинги")))
 (assert (sendmessage "Иностранный, Эмоциональный, Серии по 60 минут, Приключения, Боевик -> Викинги")))
-(defrule rule91
-(fact(name "Иностранный"))
-(fact(name "Серии по 40 минут"))
-(fact(name "Эмоциональный"))
-(not(exists (fact (name "Великолепный век"))))
-=>
-(assert (fact (name "Великолепный век")))
-(assert (sendmessage "Иностранный, Серии по 40 минут, Эмоциональный -> Великолепный век")))
-(defrule rule92
-(fact(name "Иностранный"))
-(fact(name "Серии по 40 минут"))
-(fact(name "Эмоциональный"))
-(not(exists (fact (name "Постучись в мою дверь"))))
-=>
-(assert (fact (name "Постучись в мою дверь")))
-(assert (sendmessage "Иностранный, Серии по 40 минут, Эмоциональный -> Постучись в мою дверь")))
 (defrule rule93
 (fact(name "Иностранный"))
 (fact(name "Серии по 60 минут"))
@@ -897,10 +884,10 @@
 (fact(name "Иностранный"))
 (fact(name "Серии по 40 минут"))
 (fact(name "Эмоциональный"))
-(not(exists (fact (name " Бухта Доусона"))))
+(not(exists (fact (name "Бухта Доусона"))))
 =>
-(assert (fact (name " Бухта Доусона")))
-(assert (sendmessage "Иностранный, Серии по 40 минут, Эмоциональный ->  Бухта Доусона")))
+(assert (fact (name "Бухта Доусона")))
+(assert (sendmessage "Иностранный, Серии по 40 минут, Эмоциональный -> Бухта Доусона")))
 (defrule rule98
 (fact(name "Иностранный"))
 (fact(name "Серии по 60 минут"))
